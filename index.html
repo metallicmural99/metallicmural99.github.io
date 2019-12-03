@@ -9,32 +9,88 @@
     // Make the div with id 'mycell' a Sage cell
     sagecell.makeSagecell({inputLocation:  '#mycell',
                            template:       sagecell.templates.minimal,
-                           evalButtonText: 'Activate'});
+                           evalButtonText: 'Activate'
+                           });
     // Make *any* div with class 'compute' a Sage cell
     sagecell.makeSagecell({inputLocation: 'div.compute',
                            evalButtonText: 'Evaluate'});
     });
     </script>
+    
   </head>
   <body>
-  <h1>Embedded Sage Cells</h1>
+  <h2>Genus Distribution of a random surface</h2>
+  Click the “Activate” button below to start the experiment. 
+  In this experiment, 2k is the number of sides of a polgyon, and n stands 
+  for the number of these polygons used to build surface.
+    <div id="mycell">
+    <script type="text/x-sage">
+import numpy as np
+#import IPython.display
+def k_random_perms(n, k):
+  G = SymmetricGroup(n)
+  l = []
+  for i in range(k):
+    l.append(G.random_element())
+  return l
+def genus(L):
+  G = L[0].parent()
+  n = G.degree()
+  I = G.identity()
+  J = G.identity()
+  for x in L:
+    I = x*I
+    J = x.inverse()*J
+  if len(L)%2 == 0:
+    K = J*I
+    g = ((len(L)-1)*n)/2 - len(K.cycle_type())/2 + 1
+      
+  if len(L)%2 == 1:
+    g = ((len(L)-1)*n)/2 - len(I.cycle_type())/2 - len(I.cycle_type())/2 + 1
+  return g
+  
+def expected_genus(n,k):
+  if k%2 == 0:
+    g = (k-1)*n/2 - harmonic_number(n)/2 - (-1)^n/(n*(n-1))/2 + 1
+      
+  if k%2 == 1:
+    g = (k-1)*n/2 - harmonic_number(n) + 1
+  return float(g)
+import IPython.display
 
-  <h2>Factorial</h2>
-  Click the “Activate” button below to calculate factorials.
-    <div id="mycell"><script type="text/x-sage">
-@interact
-def _(a=(1, 10)):
-    print(factorial(a))
- </script>
-</div>
+def plot_mark(x, color, legend):
+  return arrow((x, -1e-10), (x, 0), color=color, legend_label=legend, legend_color=color)
 
-<h2>Your own computations</h2>
-Type your own Sage computation below and click “Evaluate”.
-    <div class="compute"><script type="text/x-sage">plot(sin(x), (x, 0, 2*pi))</script></div>
-    <div class="compute"><script type="text/x-sage">
+def plot_histogram(n, k, genus_obtained):
+  average = mean(genus_obtained)
+  expected = expected_genus(n,k)
+
+  title = "For n={} found average genus {:.5} after {} samples. Expected genus {:.5}".format(n, N(average),len(genus_obtained),N(expected))
+  bins = srange(min(genus_obtained) - 1/2, max(genus_obtained) + 1)
+  G = histogram(genus_obtained, bins=bins, title=title)
+  G += plot_mark(average, "red", "average")
+  G += plot_mark(expected, "green", "expected")
+  return G
+
 @interact
-def f(n=(0,10)):
-    print(2^n)
-</script></div>
+def test_conjecture(n=100, k=2, samples= 50, auto_update = False) :
+  genera=[]
+  for j in range(samples):
+    genera.append(genus(k_random_perms(n,k)))
+    #print(genera)
+  H = plot_histogram(n, k, genera)
+  H.show()
+
+
+
+
+    </script>
+    </div>
+    
+
+  
+  
+
+
   </body>
 </html>
