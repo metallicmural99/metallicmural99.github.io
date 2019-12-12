@@ -20,9 +20,28 @@
   </head>
   <body>
   <h2>Genus distribution of a random surface</h2>
-  Click the “Activate” button below to start the experiment. 
-  In this experiment, 2k is the number of sides of a polgyon, and n stands 
-  for the number of these polygons used to build surface.
+  Imagine taking n squares embedded in the plane and gluing up the sides in parallel pairs to form a translation
+  surface. What genus do you expect this surface to have? To answer this question, we need a way to pick a random such surface,
+  and hence a random model.
+
+  To see what the model is, first take a square-tiled surface, and label the squares {1, ... n}. 
+  Now define a permutation $\sigma_1$ such that $\sigma_1(i) = j$ if and only if the right side of i is glued to the left side of j.
+  Similarly, define a permutation $\sigma_2(i) = j$ if and only if the top side of i is glued to the bottom side of j. 
+  From a labeled surface, you get 2 unique permutations, and from two unique permutations you get a labeled surface by reversing the process.
+
+  Hence, we will take our model to be $S_n \times S_n$, the Symmetric Group on $n$ generators direct product with itself. 
+
+  But wait, we do not need to just stick to squares. We can consider hexagon-tiled surfaces, and octagon-tiled surfaces and so on
+  in which cases the random models will be $S_n \times S_n \times S_n$ and $S_n \times S_n \times S_n \times S_n$ and a direct product of 
+  $k$ copies of $S_n$ respectively. 
+
+  The following experiment demonstrates the expected genus of a random 2k-gon tiled surface. I prove in my thesis that the expected genus 
+  is (k-1)n/2 - ln(n)/2 - \gamma +o(1) when $k$ is even and (k-1)n/2 - ln(n) - \gamma + o(1) when k is odd, where \gamma is the Euler Mascheroni constant.
+
+  Notation: 2k is the number of sides of a polgyon, and n stands 
+  for the number of these polygons used to build surface. samples is the number of samples we are considering. 
+
+  Click "Activate" to start the experiment.
     <div id="mycell">
     <script type="text/x-sage">
 import numpy as np
