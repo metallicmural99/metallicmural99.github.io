@@ -85,7 +85,7 @@ def plot_histogram(n, k, genus_obtained):
 
   title = "For n={} found average genus {} after {} samples. Expected genus {}".format(n, N(average),len(genus_obtained),N(expected))
   bins = srange(min(genus_obtained) - 1/2, max(genus_obtained) + 1)
-  G = histogram(genus_obtained, bins=bins, title=title)
+  G = histogram(genus_obtained, bins=bins, title=title, axes_labels=['genus', 'frequency'])
   G += plot_mark(average, "red", "average")
   G += plot_mark(expected, "green", "expected")
   return G
